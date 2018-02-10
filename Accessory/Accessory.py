@@ -13,20 +13,18 @@ import pdb
 
 
 class Accessory():
-  """Accessory documentation"""
+    """Accessory documentation"""
 
-  def __init__(self):
-    super( Accessory, self ).__init__()
-#    print ("Accessory constructor")
-    self._running = True
+    def __init__(self):
+        self._running = True
 
-  def terminate(self):
-    self._running = False
+    def terminate(self):
+        self._running = False
 
-  def run(self, _qDistance):
+    def run(self, _qDistance):
 
-    while self._running:
-      pass
+        while self._running:
+            pass
 
 
 if __name__ == "__main__":
@@ -43,9 +41,12 @@ if __name__ == "__main__":
     #Start Thread
     accessoryThread.start()
 
-    while True:
-      distance = qDistance.get()
-      print ("Distance: ", distance)
+    do_continue = True
+
+    while do_continue:
+        #distance = qDistance.get()
+        print ("Distance: ")
+        do_continue = False
 
     accessory.terminate()
     print ("Thread finished")
