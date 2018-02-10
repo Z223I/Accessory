@@ -17,14 +17,35 @@ class Accessory():
 
     def __init__(self):
         self._running = True
+        self.water_pump = False
 
     def terminate(self):
         self._running = False
 
-    def run(self, _qDistance):
+    def run(self, qCommand):
+        """ run is the main thread of the Accessory object.
+        It processes commands which control additional threads.
+
+        For example, There is a water pump controlled by one of the relays.
+        The water pump is going to cycle on/off repeatedly until the thread
+        is terminated.  The thread can be restarted.
+
+        @type: queue
+        @param: qCommand
+        """
 
         while self._running:
-            pass
+            if qCommand.empty():
+                pass
+            else:
+                # Get the command.
+                command = qCommand.get()
+                print("Command: ", command)
+
+                # Process the command.
+
+            # Sleep for a bit.
+            time.sleep(2)
 
 
 if __name__ == "__main__":
@@ -33,10 +54,10 @@ if __name__ == "__main__":
     accessory = Accessory()
 
 
-    qDistance = queue.Queue(maxsize=0)
+    qCommand = queue.Queue(maxsize=0)
 
     #Create Thread
-    accessoryThread = Thread(target=accessory.run, args=(qDistance,))
+    accessoryThread = Thread(target=accessory.run, args=(qCommand,))
 
     #Start Thread
     accessoryThread.start()
@@ -44,9 +65,13 @@ if __name__ == "__main__":
     do_continue = True
 
     while do_continue:
-        #distance = qDistance.get()
-        print ("Distance: ")
-        do_continue = False
+        command = input("Command: ")
+
+        if command == 'h' or command == 'q':
+            do_continue = False
+        else:
+            # Put the command in the queue.
+            qCommand.put(command)
 
     accessory.terminate()
     print ("Thread finished")
